@@ -1,0 +1,6 @@
+38/38 [==============================] - 141s 4s/step - loss: 46.4761 - dense_1_loss: 5.3920e-07 - dense_1_accuracy: 0.0883 - dense_1_accuracy_1: 0.0709 - dense_1_accuracy_2: 0.0547 - dense_1_accuracy_3: 0.0587 - dense_1_accuracy_4: 0.2542 - dense_1_accuracy_5: 0.2205 - dense_1_accuracy_6: 0.2140 - dense_1_accuracy_7: 0.7204 - dense_1_accuracy_8: 0.7025 - dense_1_accuracy_9: 0.7456 - dense_1_accuracy_10: 0.7754 - dense_1_accuracy_11: 0.8024 - dense_1_accuracy_12: 0.9314 - dense_1_accuracy_13: 0.9709 - dense_1_accuracy_14: 0.9831 - dense_1_accuracy_15: 1.0000
+
+序列开始的loss非常高，无法降低下来
+
+plan：
+    再做试验，只保留序列输出的前三层，看看loss是否可以下降，排除是太深了导致梯度消失；
