@@ -1,0 +1,8 @@
+**/__pycache__
+.idea/
+.DS_Store
+*/.DS_Store
+/test_**
+/resources/data
+/resources/images
+/resources/model
