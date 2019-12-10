@@ -6,7 +6,7 @@ from keras.models import Model
 from keras.models import load_model
 from keras.utils import plot_model
 
-from convolution_model_networks.utils.kt_utils import *
+from cnn.utils.kt_utils import *
 
 K.set_image_data_format('channels_last')
 

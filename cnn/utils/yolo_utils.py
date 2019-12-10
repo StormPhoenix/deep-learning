@@ -1,5 +1,4 @@
 import colorsys
-import imghdr
 import random
 
 import numpy as np
@@ -55,9 +54,10 @@ def preprocess_image(img_path, model_image_size):
 
 
 def draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors):
-    # font = ImageFont.truetype(font='font/FiraMono-Medium.otf',size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
-    font = ImageFont.truetype(font='dejavu/DejaVuSans-Bold.ttf',
+    font = ImageFont.truetype(font='./font/FiraMono-Medium.otf',
                               size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
+    # font = ImageFont.truetype(font='dejavu/DejaVuSans-Bold.ttf',
+    #                           size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
     thickness = (image.size[0] + image.size[1]) // 300
 
     for i, c in reversed(list(enumerate(out_classes))):

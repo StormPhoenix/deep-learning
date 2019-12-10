@@ -8,7 +8,7 @@ from keras.models import Model
 from keras.models import load_model
 from keras.utils import plot_model
 
-from convolution_model_networks.utils.resnets_utils import load_dataset, convert_to_one_hot
+from cnn.utils.resnets_utils import load_dataset, convert_to_one_hot
 
 
 def identity_block(X, f, filters, stage, block):

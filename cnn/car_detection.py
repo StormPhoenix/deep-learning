@@ -1,16 +1,17 @@
+import gc
 import os
 
-import imageio
 import tensorflow as tf
 from keras import backend as K
 from keras.models import load_model
-from matplotlib.pyplot import imshow
 from keras.utils import plot_model
-import gc
 
-from convolution_model_networks.utils.yolo_utils import read_classes, read_anchors, generate_colors, preprocess_image, \
+from cnn.utils.yolo_utils import read_classes, read_anchors, generate_colors, preprocess_image, \
     draw_boxes, scale_boxes
-from convolution_model_networks.yad2k.models.keras_yolo import yolo_boxes_to_corners, yolo_head
+from cnn.yad2k.models.keras_yolo import yolo_boxes_to_corners, yolo_head
+
+TEST_IMAGES_DIR = '../resources/images/detection/test/'
+OUTPUT_IMAGES_DIR = '../resources/images/detection/out/'
 
 
 def yolo_filter_boxes(box_confidence, boxes, box_class_probs, threshold=.6):
@@ -133,7 +134,7 @@ def yolo_eval(yolo_outputs, image_shape=(720., 1280.), max_boxes=10, score_thres
 
 def predict(sess, image_file, class_names, yolo_outputs):
     # Preprocess your image
-    image, image_data, image_shape = preprocess_image("./images/" + image_file, model_image_size=(608, 608))
+    image, image_data, image_shape = preprocess_image(TEST_IMAGES_DIR + image_file, model_image_size=(608, 608))
 
     scores, boxes, classes = yolo_eval(yolo_outputs, image_shape)
 
@@ -150,7 +151,7 @@ def predict(sess, image_file, class_names, yolo_outputs):
     # Draw bounding boxes on the image file
     draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors)
     # Save the predicted bounding box on the image
-    image.save(os.path.join("./images/out", image_file), quality=90)
+    image.save(os.path.join(OUTPUT_IMAGES_DIR, image_file), quality=90)
     # Display the results in the notebook
     # output_image = scipy.misc.imread(os.path.join("out", image_file))
     # output_image = imageio.imread(os.path.join("./images/out", image_file))
@@ -164,20 +165,23 @@ def predict(sess, image_file, class_names, yolo_outputs):
 
 
 if __name__ == '__main__':
+    # sess = K.get_session()
     sess = K.get_session()
-    class_names = read_classes("./data/coco_classes.txt")
-    anchors = read_anchors("./data/yolo_anchors.txt")
+    class_names = read_classes("../resources/data/coco_classes.txt")
+    anchors = read_anchors("../resources/data/yolo_anchors.txt")
 
     # Load models
-    yolo_model = load_model("./models/weights/yolo/yolo.h5", compile=False)
-    plot_model(yolo_model, to_file='./models/description/yolo.png', show_shapes=True)
+    yolo_model = load_model("../resources/models/weights/yolo/yolo.h5", compile=False)
+    plot_model(yolo_model, to_file='../resources/models/description/yolo.png', show_shapes=True)
     yolo_model.summary()
     yolo_outputs = yolo_head(yolo_model.output, anchors, len(class_names))
 
-    root_path = './images'
-    dir_list = os.listdir(root_path)
+    dir_list = os.listdir(TEST_IMAGES_DIR)
     for i in range(0, len(dir_list)):
-        file = os.path.join(root_path, dir_list[i])
+        if (dir_list[i] == '.DS_Store'):
+            # macOS系统上面会生成这种桌面文件
+            continue
+        file = os.path.join(TEST_IMAGES_DIR, dir_list[i])
         if os.path.isfile(file):
             out_scores, out_boxes, out_classes = predict(sess, dir_list[i], class_names, yolo_outputs)
             del out_scores, out_boxes, out_classes

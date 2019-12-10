@@ -7,7 +7,7 @@ from keras.layers import Conv2D, ZeroPadding2D, Activation, Input, concatenate
 from keras.models import Model
 from keras.layers.normalization import BatchNormalization
 from keras.layers.pooling import MaxPooling2D, AveragePooling2D
-import convolution_model_networks.utils.fr_utils as fr_utils
+import cnn.utils.fr_utils as fr_utils
 from keras.layers.core import Lambda, Flatten, Dense
 
 def inception_block_1a(X):
@@ -219,7 +219,7 @@ from keras.layers import Conv2D, ZeroPadding2D, Activation, Input, concatenate
 from keras.models import Model
 from keras.layers.normalization import BatchNormalization
 from keras.layers.pooling import MaxPooling2D, AveragePooling2D
-import convolution_model_networks.utils.fr_utils as fr_utils
+import cnn.utils.fr_utils as fr_utils
 from keras.layers.core import Lambda, Flatten, Dense
 
 

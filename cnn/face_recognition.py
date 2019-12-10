@@ -2,8 +2,11 @@ import numpy as np
 import tensorflow as tf
 from keras.utils import plot_model
 
-from convolution_model_networks.utils.fr_utils import load_weights_from_FaceNet, img_to_encoding
-from convolution_model_networks.utils.inception_blocks import faceRecoModel
+from cnn.utils.fr_utils import load_weights_from_FaceNet, img_to_encoding
+from cnn.utils.inception_blocks import faceRecoModel
+
+import keras.backend as K
+K.set_image_data_format('channels_first')
 
 
 def triplet_loss(y_true, y_pred, alpha=0.2):
@@ -36,18 +39,18 @@ def triplet_loss(y_true, y_pred, alpha=0.2):
 
 def build_database(FRmodel):
     database = {}
-    database["danielle"] = img_to_encoding("./images/face_net/danielle.png", FRmodel)
-    database["younes"] = img_to_encoding("./images/face_net/younes.jpg", FRmodel)
-    database["tian"] = img_to_encoding("./images/face_net/tian.jpg", FRmodel)
-    database["andrew"] = img_to_encoding("./images/face_net/andrew.jpg", FRmodel)
-    database["kian"] = img_to_encoding("./images/face_net/kian.jpg", FRmodel)
-    database["dan"] = img_to_encoding("./images/face_net/dan.jpg", FRmodel)
-    database["sebastiano"] = img_to_encoding("./images/face_net/sebastiano.jpg", FRmodel)
-    database["bertrand"] = img_to_encoding("./images/face_net/bertrand.jpg", FRmodel)
-    database["kevin"] = img_to_encoding("./images/face_net/kevin.jpg", FRmodel)
-    database["felix"] = img_to_encoding("./images/face_net/felix.jpg", FRmodel)
-    database["benoit"] = img_to_encoding("./images/face_net/benoit.jpg", FRmodel)
-    database["arnaud"] = img_to_encoding("./images/face_net/arnaud.jpg", FRmodel)
+    database["danielle"] = img_to_encoding("../resources/images/face_net/danielle.png", FRmodel)
+    database["younes"] = img_to_encoding("../resources/images/face_net/younes.jpg", FRmodel)
+    database["tian"] = img_to_encoding("../resources/images/face_net/tian.jpg", FRmodel)
+    database["andrew"] = img_to_encoding("../resources/images/face_net/andrew.jpg", FRmodel)
+    database["kian"] = img_to_encoding("../resources/images/face_net/kian.jpg", FRmodel)
+    database["dan"] = img_to_encoding("../resources/images/face_net/dan.jpg", FRmodel)
+    database["sebastiano"] = img_to_encoding("../resources/images/face_net/sebastiano.jpg", FRmodel)
+    database["bertrand"] = img_to_encoding("../resources/images/face_net/bertrand.jpg", FRmodel)
+    database["kevin"] = img_to_encoding("../resources/images/face_net/kevin.jpg", FRmodel)
+    database["felix"] = img_to_encoding("../resources/images/face_net/felix.jpg", FRmodel)
+    database["benoit"] = img_to_encoding("../resources/images/face_net/benoit.jpg", FRmodel)
+    database["arnaud"] = img_to_encoding("../resources/images/face_net/arnaud.jpg", FRmodel)
     return database
 
 
@@ -114,10 +117,10 @@ def who_is_it(image_path, database, model):
 if __name__ == '__main__':
     FRmodel = faceRecoModel(input_shape=(3, 96, 96))
     print("Total Params:", FRmodel.count_params())
-    plot_model(FRmodel, to_file='./models/description/face_recognition.png', show_shapes=True)
+    plot_model(FRmodel, to_file='../resources/images/face_recognition/face_net_desc.png', show_shapes=True)
     FRmodel.compile(optimizer='adam', loss=triplet_loss, metrics=['accuracy'])
     load_weights_from_FaceNet(FRmodel=FRmodel)
     database = build_database(FRmodel=FRmodel)
-    verify("./images/face_net/camera_0.jpg", "younes", database, FRmodel)
-    verify("./images/face_net/camera_2.jpg", "kian", database, FRmodel)
-    who_is_it("./images/face_net/camera_0.jpg", database, FRmodel)
+    verify("../resources/images/face_net/camera_0.jpg", "younes", database, FRmodel)
+    verify("../resources/images/face_net/camera_2.jpg", "kian", database, FRmodel)
+    who_is_it("../resources/images/face_net/camera_0.jpg", database, FRmodel)

@@ -11,7 +11,7 @@ from keras.models import load_model
 from keras.optimizers import RMSprop
 from keras.utils import plot_model
 
-from convolution_model_networks.utils.cnn_utils import load_dataset, convert_to_one_hot
+from cnn.utils.cnn_utils import load_dataset, convert_to_one_hot
 
 K.set_image_data_format('channels_last')
 

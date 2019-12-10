@@ -1,6 +1,6 @@
 import os
 
-from convolution_model_networks.utils.cnn_utils import *
+from cnn.utils.cnn_utils import *
 import matplotlib.pyplot as plt
 
 X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()

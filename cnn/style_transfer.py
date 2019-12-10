@@ -1,4 +1,4 @@
-from convolution_model_networks.utils.nst_utils import *
+from cnn.utils.nst_utils import *
 
 
 def compute_content_cost(a_C, a_G):
