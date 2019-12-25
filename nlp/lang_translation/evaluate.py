@@ -45,7 +45,7 @@ def predict(input_tensor, words_len, encoder: EncoderRNN, decoder: AttDecoderRNN
                 .repeat(input_tensor.shape[0], 1) \
                 .to(device=device)
         else:
-            break
+            result.append('<EOS>')
     return result
 
 

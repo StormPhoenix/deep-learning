@@ -1,3 +1,5 @@
+import random
+
 import torch
 import torch.nn as nn
 import torch.optim as optimizer
@@ -7,7 +9,7 @@ import nlp.lang_translation.config as config
 from nlp.lang_translation.data_utils import get_text_pairs
 from nlp.lang_translation.seq2seq.models import EncoderRNN, AttDecoderRNN, device
 
-teaching_ratio = 0.7
+teacher_forceing_ratio = 0.8
 learning_rate = 0.01
 
 SOS_Token = 1
@@ -24,15 +26,25 @@ def get_loss(input_batch, input_length_batch, target_batch, encoder: EncoderRNN,
     decoder_input = torch.Tensor([[SOS_Token]]).repeat(config.batch_size, 1).long().to(device)
 
     loss = 0
-
-    # TODO use not teaching
-
-    decoder_hidden = h_0
     target_length = target_batch.shape[1]
-    for i in range(target_length):
-        decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, encoder_outputs)
-        loss += criterion(decoder_output.squeeze(1), target_batch[:, i])
-        decoder_input = target_batch[:, i].unsqueeze(-1)
+    decoder_hidden = h_0
+
+    use_teacher_forcing = True if random.random() < teacher_forceing_ratio else False
+    if use_teacher_forcing:
+        for i in range(target_length):
+            decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, encoder_outputs)
+            loss += criterion(decoder_output.squeeze(1), target_batch[:, i])
+            decoder_input = target_batch[:, i].unsqueeze(-1)
+    else:
+        for i in range(target_length):
+            # decoder_output shape = (batch_size, 1, vocab_size)
+            decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden, encoder_outputs)
+            # top_i shape = [batch_size, 1, 1]
+            top_v, top_i = decoder_output.topk(1, dim=-1)
+            decoder_input = top_i.squeeze(1).detach()
+
+            loss += criterion(decoder_output.squeeze(1), target_batch[:, i])
+
     loss.backward()
     encoder_optimizer.step()
     decoder_optimizer.step()
