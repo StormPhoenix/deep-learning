@@ -110,14 +110,14 @@ class SimpleSeq2SeqModel:
         if not os.path.exists(config.weight_model_path):
             raise ValueError('Model must be trained before predicting. ')
 
-        input_sentence = [word2id_map.get(word, 1) for word in input_sentence]
+        input_sentence = [word2id_map.get_id(word, 1) for word in input_sentence]
         input_sentence = pad_sequences([input_sentence], maxlen=config.couplet_max_len, padding='post',
-                                       value=word2id_map.get('<pad>', 0))
+                                       value=word2id_map.get_id('<pad>', 0))
 
         states_value = self.encoder.predict(np.array(input_sentence))
 
         target_sentence = np.zeros(shape=(1, 1))
-        target_sentence[0, 0] = word2id_map.get('<go>', 0)
+        target_sentence[0, 0] = word2id_map.get_id('<go>', 0)
 
         decoded_sentence = ''
         while True:
@@ -125,10 +125,10 @@ class SimpleSeq2SeqModel:
             output, states_h, states_c = self.decoder.predict([target_sentence] + states_value)
             token_index = np.argmax(output[0, 0, :])
 
-            if token_index == word2id_map.get('<eos>', 0):
+            if token_index == word2id_map.get_id('<eos>', 0):
                 break
 
-            token = id2word_map.get(token_index, '<unk>')
+            token = id2word_map.get_id(token_index, '<unk>')
             decoded_sentence += token
             target_sentence[0, 0] = token_index
             states_value = [states_h, states_c]
@@ -267,14 +267,14 @@ class AttentionalSeq2seqModel:
         if not os.path.exists(config.weight_model_path):
             raise ValueError('Model must be trained before predicting. ')
 
-        input_sentence = [word2id_map.get(word, 1) for word in input_sentence]
+        input_sentence = [word2id_map.get_id(word, 1) for word in input_sentence]
         input_sentence = pad_sequences([input_sentence], maxlen=config.couplet_max_len, padding='post',
-                                       value=word2id_map.get('<pad>', 0))
+                                       value=word2id_map.get_id('<pad>', 0))
 
         enc_output, enc_state_h, enc_state_c = self.encoder.predict(np.array(input_sentence))
 
         target_sentence = np.zeros(shape=(1, 1))
-        target_sentence[0, 0] = word2id_map.get('<go>', 0)
+        target_sentence[0, 0] = word2id_map.get_id('<go>', 0)
 
         decoded_sentence = ''
         state_h = enc_state_h
@@ -284,10 +284,10 @@ class AttentionalSeq2seqModel:
 
             token_index = np.argmax(output[0, :])
 
-            if token_index == word2id_map.get('<eos>', 0):
+            if token_index == word2id_map.get_id('<eos>', 0):
                 break
 
-            token = id2word_map.get(token_index, '<unk>')
+            token = id2word_map.get_id(token_index, '<unk>')
             decoded_sentence += token
             target_sentence[0, 0] = token_index
         return decoded_sentence

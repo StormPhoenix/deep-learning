@@ -1,7 +1,9 @@
 # Data Set
 
-# 翻译材料的最大长度，用来过滤太长的句子
+# 翻译材料的最大长度，用来过滤太长的句子，实际长度需要加上2（<SOS>, <EOS>）
 max_length = 50
+
+sequence_length = max_length + 2
 
 batch_size = 200
 

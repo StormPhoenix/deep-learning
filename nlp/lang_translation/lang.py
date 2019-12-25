@@ -11,6 +11,12 @@ class Lang:
         self.index2word = {0: '<PAD>', 1: '<SOS>', 2: '<EOS>', 3: '<UNK>'}
         self.word_count = 4
 
+    def get_id(self, word):
+        return self.word2index.get(word, 3)
+
+    def get_word(self, id):
+        return self.index2word.get(id, '<UNK>')
+
     def add_sentence(self, sentence):
         for word in sentence:
             self.add_word(word=word)

@@ -11,7 +11,7 @@ elif config.use_model == 'simple-seq2seq':
 def main():
     word_id_map, id_word_map = build_vocab()
     generator = SimpleSeq2SeqGenerator(config.train_set_size, config.batch_size, word_id_map)
-    model = Seq2SeqModel(len(word_id_map), word_id_map.get('<pad>', 0))
+    model = Seq2SeqModel(len(word_id_map), word_id_map.get_id('<pad>', 0))
     model.train(generator)
     while True:
         sententce = input('input:')

@@ -54,15 +54,19 @@ def pad_sequence(translation_pairs, input_lang_dict, target_lang_dict):
     input_tensor_length = []
     target_tensor = []
 
+    # 为了防止出现 bug，这里手动将 input_lang 的第一条数据手动做 padding ， 然后再调用 pad_sequence
+    while len(input_lang[0]) < config.sequence_length:
+        input_lang[0].append(input_lang_dict.get_id('<PAD>'))
+
     for i in range(length):
         input_tensor.append(torch.tensor(input_lang[i], dtype=torch.long, device=device))
         input_tensor_length.append(len(input_lang[i]))
         target_tensor.append(torch.tensor(input_lang[i], dtype=torch.long, device=device))
 
     input_tensor = nn.utils.rnn.pad_sequence(input_tensor, batch_first=True,
-                                             padding_value=input_lang_dict.word2index.get('<PAD>'))
+                                             padding_value=input_lang_dict.get_id('<PAD>'))
     target_tensor = nn.utils.rnn.pad_sequence(target_tensor, batch_first=True,
-                                              padding_value=target_lang_dict.word2index.get('<PAD>'))
+                                              padding_value=target_lang_dict.get_id('<PAD>'))
 
     return input_tensor, input_tensor_length, target_tensor
 
@@ -115,14 +119,12 @@ def main():
     in_vocab_size = ch_lang_dict.word_count
     out_vocab_size = en_lang_dict.word_count
 
-    seq_len = input_tensor.shape[1]
-
     encoder = EncoderRNN(vocab_size=in_vocab_size,
                          batch_size=config.batch_size,
-                         max_seq_len=seq_len,
+                         max_seq_len=config.sequence_length,
                          hidden_units=config.hidden_units).to(device)
     decoder = AttDecoderRNN(vocab_size=out_vocab_size,
-                            max_encoder_seq_length=seq_len,
+                            max_encoder_seq_length=config.sequence_length,
                             batch_size=config.batch_size,
                             hidden_units=config.hidden_units).to(device)
     train(input_tensor=input_tensor,
