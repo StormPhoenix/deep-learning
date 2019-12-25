@@ -9,8 +9,8 @@ from keras.optimizers import Adam
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import plot_model
 
-import config
-from callback import LossHistory
+import nlp.couplet_generator.config as config
+from nlp.couplet_generator.callback import LossHistory
 
 
 class SimpleSeq2SeqModel:

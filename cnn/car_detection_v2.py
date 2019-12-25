@@ -3,12 +3,14 @@ import os
 
 import tensorflow as tf
 from keras import backend as K
-from keras.models import load_model
+from keras.initializers import glorot_uniform
+from keras.layers import Conv2D
+from keras.models import load_model, Model
 from keras.utils import plot_model
 
 from cnn.utils.yolo_utils import read_classes, read_anchors, generate_colors, preprocess_image, \
     draw_boxes, scale_boxes
-from cnn.yad2k.models.keras_yolo import yolo_boxes_to_corners, yolo_head
+from cnn.yad2k.models.keras_yolo import yolo_boxes_to_corners
 
 TEST_IMAGES_DIR = '../resources/images/detection/test/'
 OUTPUT_IMAGES_DIR = '../resources/images/detection/out/'
@@ -173,7 +175,21 @@ if __name__ == '__main__':
     # Load models
     yolo_model = load_model("../resources/models/weights/yolo/yolo.h5", compile=False)
     plot_model(yolo_model, to_file='../resources/models/description/yolo_output.png', show_shapes=True)
-    yolo_model.summary()
+    # yolo_model.summary()
+
+    yolo_last_relu_layer = yolo_model.get_layer('leaky_re_lu_22').output
+    # 修改输出层
+    output_layer = Conv2D(name='conv2d_23', filters=30, kernel_size=(1, 1), strides=(1, 1), padding='same'
+                          , kernel_initializer=glorot_uniform(seed=0))(yolo_last_relu_layer)
+
+    revised_model = Model(inputs=yolo_model.input, outputs=output_layer)
+    revised_model.summary()
+
+    plot_model(revised_model, to_file='../resources/models/description/revised_model.png', show_shapes=True)
+
+    print('bingo')
+
+    """
     yolo_outputs = yolo_head(yolo_model.output, anchors, len(class_names))
 
     dir_list = os.listdir(TEST_IMAGES_DIR)
@@ -186,3 +202,4 @@ if __name__ == '__main__':
             out_scores, out_boxes, out_classes = predict(sess, dir_list[i], class_names, yolo_outputs)
             del out_scores, out_boxes, out_classes
             gc.collect()
+    """
