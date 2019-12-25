@@ -80,9 +80,8 @@ def train(input_tensor, input_tensor_length, target_tensor, input_lang_dict, out
     dataset_size = input_tensor.shape[0]
     epoch_count = int(dataset_size / config.batch_size)
 
-    loss = 0
-
     for epoch in range(epochs):
+        loss = 0
         print('epoch : {}'.format(epoch))
         for e in tqdm(range(epoch_count)):
             start_index = e * config.batch_size
@@ -101,6 +100,9 @@ def train(input_tensor, input_tensor_length, target_tensor, input_lang_dict, out
 
         torch.save(encoder.state_dict(), config.MODEL_ENCODER_PATH)
         torch.save(decoder.state_dict(), config.MODEL_DECODER_PATH)
+
+        print('total loss : {}'.format(loss))
+
     print('bingo')
 
 

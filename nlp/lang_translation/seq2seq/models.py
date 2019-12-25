@@ -11,6 +11,7 @@ import torch.nn.functional as F
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
+
 class EncoderRNN(nn.Module):
     def __init__(self, vocab_size, embedding_dim=128, hidden_units=128, batch_size=64, max_seq_len=20):
         """
@@ -106,11 +107,8 @@ class DecoderRNN(nn.Module):
 
 
 class AttDecoderRNN(nn.Module):
-    """
-    TODO Dropout, Masking
-    """
-
-    def __init__(self, vocab_size, embedding_dim=256, hidden_units=128, max_encoder_seq_length=50, batch_size=64, dropout_prob=0.1):
+    def __init__(self, vocab_size, embedding_dim=256, hidden_units=128, max_encoder_seq_length=50, batch_size=64,
+                 dropout_prob=0.1):
         super(AttDecoderRNN, self).__init__()
         self.vocab_size = vocab_size
         self.embedding_dim = embedding_dim
