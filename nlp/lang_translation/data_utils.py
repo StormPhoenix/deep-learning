@@ -61,7 +61,7 @@ def filter_english_texts(text_line: str):
 
 
 def read_texts(path):
-    with open(path, 'r') as fr:
+    with open(path, 'r', encoding='utf8') as fr:
         texts = fr.readlines()
     return texts
 

@@ -11,7 +11,6 @@ import torch.nn.functional as F
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-
 class EncoderRNN(nn.Module):
     def __init__(self, vocab_size, embedding_dim=128, hidden_units=128, batch_size=64, max_seq_len=20):
         """
@@ -61,9 +60,9 @@ class EncoderRNN(nn.Module):
     def default_hidden(self):
         # shape = (num_layers * num_directions, batch_size, hidden_size) batch_size 的位置和 batch_first 参数无关
         if self.bidirectional:
-            return torch.zeros(self.num_layers * 2, self.batch_size, self.hidden_size)
+            return torch.zeros(self.num_layers * 2, self.batch_size, self.hidden_size, device=device)
         else:
-            return torch.zeros(self.num_layers, self.batch_size, self.hidden_size)
+            return torch.zeros(self.num_layers, self.batch_size, self.hidden_size, device=device)
 
 
 class DecoderRNN(nn.Module):

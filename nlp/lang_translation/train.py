@@ -21,7 +21,7 @@ def get_loss(input_batch, input_length_batch, target_batch, encoder: EncoderRNN,
     encoder_outputs, hidden = encoder(input_batch, input_length_batch, h_0)
 
     # all teaching
-    decoder_input = torch.Tensor([[SOS_Token]]).repeat(config.batch_size, 1).long()
+    decoder_input = torch.Tensor([[SOS_Token]]).repeat(config.batch_size, 1).long().to(device)
 
     loss = 0
 
@@ -118,11 +118,11 @@ def main():
     encoder = EncoderRNN(vocab_size=in_vocab_size,
                          batch_size=config.batch_size,
                          max_seq_len=seq_len,
-                         hidden_units=config.hidden_units)
+                         hidden_units=config.hidden_units).to(device)
     decoder = AttDecoderRNN(vocab_size=out_vocab_size,
                             max_encoder_seq_length=seq_len,
                             batch_size=config.batch_size,
-                            hidden_units=config.hidden_units)
+                            hidden_units=config.hidden_units).to(device)
     train(input_tensor=input_tensor,
           input_tensor_length=input_tensor_length,
           target_tensor=target_tensor,
