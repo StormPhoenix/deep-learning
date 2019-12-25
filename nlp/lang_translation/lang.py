@@ -1,7 +1,7 @@
 import os
 import pickle
 
-LANG_DICT_PATH = '../../resources/data/nlp/lang_translation/{}.h5'
+import nlp.lang_translation.config as config
 
 
 class Lang:
@@ -37,10 +37,10 @@ class Lang:
         return parsed_words
 
     def is_dict_exists(self):
-        return os.path.exists(LANG_DICT_PATH.format(self.lang_name))
+        return os.path.exists(config.LANG_DICT_PATH.format(self.lang_name))
 
     def load(self):
-        with open(LANG_DICT_PATH.format(self.lang_name), 'rb') as fr:
+        with open(config.LANG_DICT_PATH.format(self.lang_name), 'rb') as fr:
             lang_dict = pickle.load(fr)
             self.word2index = lang_dict['word2index']
             self.index2word = lang_dict['index2word']
@@ -53,5 +53,5 @@ class Lang:
             'word_count': self.word_count
         }
 
-        with open(LANG_DICT_PATH.format(self.lang_name), 'wb') as fw:
+        with open(config.LANG_DICT_PATH.format(self.lang_name), 'wb') as fw:
             pickle.dump(lang_dict, fw)

@@ -13,30 +13,6 @@ learning_rate = 0.01
 SOS_Token = 1
 
 
-def get_test_data():
-    input_tensor = torch.Tensor([
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 4, 1, 1, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 1, 1, 1, 1],
-        [0, 4, 6, 2, 4, 6, 2, 6, 4, 6, 2, 6, 1, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 4, 6, 2, 1],
-        [0, 4, 6, 2, 6, 2, 2, 6, 4, 6, 2, 6, 1, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 1, 1, 1, 1],
-        [0, 4, 4, 6, 2, 6, 1, 1, 1, 1, 1, 1, 1, 1],
-    ]).long()
-
-    target_tensor = torch.Tensor([
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 4, 1, 1],
-        [0, 4, 6, 6, 2, 6, 1, 1, 1, 1, 1, 1, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 6, 2, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 4, 6, 1],
-        [0, 4, 6, 2, 6, 2, 2, 6, 4, 6, 2, 6, 1],
-        [0, 4, 6, 2, 6, 2, 4, 6, 2, 6, 4, 6, 1],
-        [0, 4, 6, 2, 6, 2, 2, 6, 4, 6, 2, 6, 1],
-    ]).long()
-
-    return input_tensor, target_tensor
-
-
 def get_loss(input_batch, input_length_batch, target_batch, encoder: EncoderRNN, decoder: AttDecoderRNN,
              encoder_optimizer, decoder_optimizer, criterion):
     encoder_optimizer.zero_grad()

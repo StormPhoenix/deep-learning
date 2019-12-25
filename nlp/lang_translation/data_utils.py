@@ -1,9 +1,6 @@
 import nlp.lang_translation.config as config
 from nlp.lang_translation.lang import Lang
 
-CHINESE_LANG_PATH = '../../resources/data/lang/dataset/chinese_train'
-ENGLISH_LANG_PATH = '../../resources/data/lang/dataset/english_train'
-
 
 def empty(string: str):
     return string is None or len(string) is 0 or string.isspace()
@@ -70,7 +67,7 @@ def read_texts(path):
 
 
 def read_chinese_texts():
-    texts = read_texts(CHINESE_LANG_PATH)
+    texts = read_texts(config.CHINESE_LANG_PATH)
 
     filter_texts = []
     for line in texts:
@@ -80,7 +77,7 @@ def read_chinese_texts():
 
 
 def read_english_texts():
-    texts = read_texts(ENGLISH_LANG_PATH)
+    texts = read_texts(config.ENGLISH_LANG_PATH)
 
     filter_texts = []
     for line in texts:
